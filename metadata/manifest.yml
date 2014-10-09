@@ -1,0 +1,48 @@
+---
+Name: kitesdk-minicluster
+Cartridge-Short-Name: KITEMINICLUSTER
+Display-Name: Kite SDK Minicluster 0.16.1
+Description: A KiteSDK Minicluster cartridge for development use only.
+Version: '0.16.1'
+Versions:
+- '0.16.1'
+License: ASL 2.0
+Vendor: Cloudera
+Cartridge-Version: 0.16.1
+Cartridge-Vendor: cloudera
+Categories:
+- service
+- database
+- embedded
+Provides:
+- kiteminicluster-0.16.1
+- kiteminicluster
+Endpoints:
+- Private-IP-Name: IP
+  Private-Port-Name: NAMENODE_RPC_PORT
+  Private-Port: 8020
+- Private-IP-Name: IP
+  Private-Port-Name: NAMENODE_HTTP_PORT
+  Private-Port: 50070
+- Private-IP-Name: IP
+  Private-Port-Name: DATANODE_DATA_PORT
+  Private-Port: 50010
+- Private-IP-Name: IP
+  Private-Port-Name: DATANODE_IPC_PORT
+  Private-Port: 50020
+- Private-IP-Name: IP
+  Private-Port-Name: DATANODE_HTTP_PORT
+  Private-Port: 50075
+- Private-IP-Name: IP
+  Private-Port-Name: ZOOKEEPER_PORT
+  Private-Port: 28282
+- Private-IP-Name: IP
+  Private-Port-Name: HBASE_MASTER_PORT
+  Private-Port: 16000
+- Private-IP-Name: IP
+  Private-Port-Name: HBASE_REGIONSERVER_PORT
+  Private-Port: 60020
+Scaling:
+  Min: 1
+  Max: -1
+Source-Url: https://github.com/awarring/kite-minicluster-openshift-cartridge.git

@@ -1,0 +1,86 @@
+#!/bin/bash -xu
+
+# KiteSDK Minicluster cartridge control script.
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+function start {
+  echo "Starting KiteSDK Minicluster with hdfs zk hbase"
+  ps aux | grep "org.kitesdk.minicluster.cli.Main run" | grep -v grep > /dev/null
+  if [ "$?" -eq "0" ]; then
+    client_result "KiteSDK Minicluster is already running. Please stop it before starting."
+  else
+    nohup kite-minicluster run hdfs zk hbase \
+	-b $OPENSHIFT_KITEMINICLUSTER_IP --zk-port 28282 -Dhbase-master-port=16000 \
+	> ${OPENSHIFT_KITEMINICLUSTER_DIR}logs/minicluster.log 2>&1 &
+  fi
+}
+
+function stop {
+  pid=`ps aux | grep "org.kitesdk.minicluster.cli.Main run" | grep -v grep | awk '{print $2}'`
+  if [ "$pid" ]; then 
+    client_result "Stopping KiteSDK Minicluster..."
+    kill "$pid"
+    for i in {1..15}; do 
+      ps aux | grep "org.kitesdk.minicluster.cli.Main run" | grep -v grep > /dev/null
+      if [ "$?" -ne "0" ]; then
+        client_result "KiteSDK Minicluster stopped."
+        return
+      fi
+      sleep 2
+    done
+    client_result "KiteSDK Minicluster timed out stopping. Proceeding with kill -9"
+    kill -9  "$pid"
+  else
+    client_result "KiteSDK Minicluster not running."
+  fi;
+}
+
+function restart {
+  stop
+  start
+}
+
+function status {
+  ps aux | grep "org.kitesdk.minicluster.cli.Main run" | grep -v grep > /dev/null
+  if [ "$?" -eq "0" ]; then
+    client_result "KiteSDK Minicluster running."
+  else
+    client_result "KiteSDK Minicluster stopped."
+  fi
+}
+
+function pre-build() {
+  client_result "control pre-build is no-op"
+}
+
+function build() {
+  client_result "control build is no-op"
+}
+
+function deploy() {
+  client_result "control deploy is no-op"
+}
+
+function post-deploy() {
+  client_result "control post-deploy is no-op"
+}
+
+function tidy() {
+  client_result "control tidy is no-op"
+}
+
+case "$1" in
+  start)                start ;;
+  stop)                 stop ;;
+  restart)              restart ;;
+  status)               status ;;
+  tidy)                 tidy ;;
+  pre-build)            pre-build ;;
+  build)                build ;;
+  deploy)               deploy ;;
+  post-deploy)          post0deploy ;;
+  *)           exit 0
+esac
+
+exit 0

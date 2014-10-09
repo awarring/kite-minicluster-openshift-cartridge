@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+# KiteSDK Minicluster cartridge setup script.
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+echo ${OPENSHIFT_KITEMINICLUSTER_DIR}kiteminicluster-install/bin > ${OPENSHIFT_KITEMINICLUSTER_DIR}env/OPENSHIFT_KITEMINICLUSTER_PATH_ELEMENT
+mkdir ${OPENSHIFT_KITEMINICLUSTER_DIR}logs
+
+exit 0
